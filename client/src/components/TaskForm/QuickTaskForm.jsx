@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './QuickTaskForm.css'; // You'll style the popup here
 import { toast } from 'react-toastify'
+import BACKEND_URL from '../../../Config'
 
 export default function QuickTaskModal({ open, onClose, onSave }) {
   const [date, setDate] = useState('');
@@ -79,7 +80,7 @@ export default function QuickTaskModal({ open, onClose, onSave }) {
     };
     
     try {
-      const req = await fetch('https://time-management-coach-backend.onrender.com/api/qtasks', {
+      const req = await fetch(`${BACKEND_URL}/api/qtasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
