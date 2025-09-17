@@ -11,6 +11,7 @@ import QuickTaskHistory from './components/QtaskHistory/QuickTaskHistory';
 import EditPriorityTags from './components/EditTags/EditTags';
 import EditTaskPage from './components/EditTask/EditTask';
 import BACKEND_URL from '../Config'
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
@@ -22,7 +23,6 @@ function App() {
     try {
       const res = await fetch(`${BACKEND_URL}/api/profile`, {
         headers: { Authorization: `Bearer ${token}` },
-
       });
       const data = await res.json();
       if (data.user) {
