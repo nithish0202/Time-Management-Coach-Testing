@@ -6,6 +6,7 @@ import QtaskReport from "../TaskReport/QtaskReport";
 import axios from 'axios';
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
+import BACKEND_URL from '../../../Config'
 
 function Home(isLoggedIn) {
   const [task, setTask] = useState([]);
@@ -28,10 +29,10 @@ function Home(isLoggedIn) {
     const taskdata = async () => {
       try {
         const [taskRes, qtaskRes] = await Promise.all([
-          axios.get('https://time-management-coach-backend.onrender.com/api/tasks', { 
+          axios.get(`${BACKEND_URL}/api/tasks`, { 
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
           }),
-          axios.get('https://time-management-coach-backend.onrender.com/api/qtasks', { 
+          axios.get(`${BACKEND_URL}/api/qtasks`, { 
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
           })
         ]);
