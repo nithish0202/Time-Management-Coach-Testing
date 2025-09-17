@@ -13,6 +13,8 @@ import Chip from '@mui/material/Chip';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './FourQuadrants.css';
+import BACKEND_URL from '../../../Config'
+
 const label = { inputProps: { 'aria-label': 'Size switch demo' } };
 
 
@@ -141,7 +143,7 @@ function FourQuadrants({ tasks, setTask, setHideTable, setQtasks }) {
 
   const handleTagSave = async (updatedTask) => {
     try {
-      const response = await axios.put(`https://time-management-coach-backend.onrender.com/api/tasks/${updatedTask.id}`, updatedTask);
+      const response = await axios.put(`${BACKEND_URL}/api/tasks/${updatedTask.id}`, updatedTask);
       setTask(prev => prev.map(t => t.id === updatedTask.id ? response.data : t));
       toast.success("Priority tags updated");
     } catch (error) {
@@ -206,12 +208,12 @@ function FourQuadrants({ tasks, setTask, setHideTable, setQtasks }) {
     try {
       const axios = (await import('axios')).default;
       if (editTask) {
-        const res = await axios.put(`https://time-management-coach-backend.onrender.com/api/tasks/${task.id}`, task, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+        const res = await axios.put(`${BACKEND_URL}/api/tasks/${task.id}`, task, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
         setTask(prev => prev.map(t => t.id === task.id ? res.data : t));
         console.log("Task updated:", res.data);
         toast.success("Task updated");
       } else {
-        const res = await axios.post('https://time-management-coach-backend.onrender.com/api/tasks', task,{ headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}});
+        const res = await axios.post(`${BACKEND_URL}/api/tasks`, task,{ headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}});
         setTask(prev => [...prev, res.data]);
         toast.success("Task created");
       }
