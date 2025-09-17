@@ -2,6 +2,7 @@ import { useEffect, useCallback, useState } from 'react';
 import './LoginPage.css';
 import illustration from '../../assets/login-illustration.svg';
 import { useNavigate } from 'react-router-dom';
+import BACKEND_URL from '../../../Config'
 
 function LoginPage({onLoginSuccess}) {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ function LoginPage({onLoginSuccess}) {
   const handleCredentialResponse = useCallback(async (response) => {
     setLoading(true);
     try {
-      const res = await fetch('https://time-management-coach-backend.onrender.com/api/auth/google-login', {
+      const res = await fetch(`${BACKEND_URL}/api/auth/google-login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
