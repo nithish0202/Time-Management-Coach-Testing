@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
 import './EditTask.css';
+import BACKEND_URL from '../../../Config';
 
 function EditTaskPage() {
   const { id } = useParams();
@@ -24,7 +25,7 @@ function EditTaskPage() {
 
   useEffect(() => {
     if (isUpdate) {
-      fetch(`https://time-management-coach-backend.onrender.com/api/tasks/${id}`, {
+      fetch(`${BACKEND_URL}/api/tasks/${id}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -84,8 +85,8 @@ function EditTaskPage() {
 
     const method = isUpdate ? 'PUT' : 'POST';
     const url = isUpdate
-      ? `https://time-management-coach-backend.onrender.com/api/tasks/${id}`
-      : `https://time-management-coach-backend.onrender.com/api/tasks`;
+      ? `${BACKEND_URL}/api/tasks/${id}`
+      : `${BACKEND_URL}/api/tasks`;
 
     fetch(url, {
       method,
