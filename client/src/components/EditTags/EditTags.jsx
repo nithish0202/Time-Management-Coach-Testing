@@ -9,6 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import CircularProgress from '@mui/material/CircularProgress';
 import './EditTags.css';
+import BACKEND_URL from '../../../Config';
 const tagOptions = {
   complexity: [
     "Low Complexity Focus Task",
@@ -93,7 +94,7 @@ export default function EditPriorityTags() {
     useEffect(() => {
       const fetchTask = async () => {
         try {
-          const res = await fetch(`https://time-management-coach-backend.onrender.com/api/tasks/${id}`, {
+          const res = await fetch(`${BACKEND_URL}/api/tasks/${id}`, {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
@@ -127,7 +128,7 @@ export default function EditPriorityTags() {
     const handleSubmit = async () => {
       try {
         const updatedTask = { ...task, priority_tags: tags };
-        const res = await fetch(`https://time-management-coach-backend.onrender.com/api/tasks/${id}`, {
+        const res = await fetch(`${BACKEND_URL}/api/tasks/${id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
