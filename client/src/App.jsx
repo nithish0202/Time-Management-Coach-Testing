@@ -10,6 +10,7 @@ import LoginPage from './components/LoginPage/LoginPage';
 import QuickTaskHistory from './components/QtaskHistory/QuickTaskHistory';
 import EditPriorityTags from './components/EditTags/EditTags';
 import EditTaskPage from './components/EditTask/EditTask';
+import BACKEND_URL from '../Config'
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
@@ -19,7 +20,7 @@ function App() {
     if (!token) return;
 
     try {
-      const res = await fetch('https://time-management-coach-backend.onrender.com/api/profile', {
+      const res = await fetch(`${BACKEND_URL}/api/profile`, {
         headers: { Authorization: `Bearer ${token}` },
 
       });
