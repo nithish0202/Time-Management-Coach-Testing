@@ -9,7 +9,7 @@ export default function QuickTaskModal({ open, onClose, onSave }) {
   const [timeSpent, setTimeSpent] = useState('');
   const [selectedWorkTasks, setSelectedWorkTasks] = useState([]);
   const [selectedPersonalTasks, setSelectedPersonalTasks] = useState([]);
-  const [user,setUser] = useState('');
+  // const [user,setUser] = useState('');
   
   const workTasks = [
     "Answer Incoming calls",
@@ -56,7 +56,7 @@ export default function QuickTaskModal({ open, onClose, onSave }) {
     setDate("");
     setSelectedWorkTasks([]);
     setSelectedPersonalTasks([]);
-    setUser(""); 
+    // setUser(""); 
     setNotes("");
     setTimeSpent(""); 
     onClose();
@@ -74,7 +74,7 @@ export default function QuickTaskModal({ open, onClose, onSave }) {
       date:new Date(date),
       workTasks: selectedWorkTasks,
       personalTasks: selectedPersonalTasks,
-      assigned_by: user,
+      // assigned_by: user,
       notes,
       timeSpent: `${timeSpent} min`
     };
@@ -99,7 +99,7 @@ export default function QuickTaskModal({ open, onClose, onSave }) {
       setDate("");
       setSelectedWorkTasks([]);
       setSelectedPersonalTasks([]);
-      setUser(""); 
+      // setUser(""); 
       setNotes("");
       setTimeSpent("");
 
@@ -129,7 +129,7 @@ export default function QuickTaskModal({ open, onClose, onSave }) {
           />
         </div>
 
-        <div>
+        {/* <div>
           <label>Assigned To</label>
           <select
             name="assigned_by"
@@ -143,7 +143,7 @@ export default function QuickTaskModal({ open, onClose, onSave }) {
             <option value="user2">User 2</option>
             <option value="user3">User 3</option>
           </select>
-        </div>
+        </div> */}
 
         <div style={{gridColumn: "1 / span 2"}}>
           <h4>Select Tasks (Work) :</h4>
