@@ -11,7 +11,7 @@ exports.getTasks = async (req, res) => {
 };
 
 exports.createTask = async (req, res) => {
-  const { title, created_at, due_date, priority, note, reason, status, assigned_to, priority_tags } = req.body;
+  const { title, created_at, due_date, priority, note, reason, status, priority_tags } = req.body;
   try {
     const task = await prisma.task.create({
       data: {
@@ -22,7 +22,6 @@ exports.createTask = async (req, res) => {
         note,
         reason,
         status,
-        assigned_to,
         priority_tags,
         userId: Number(req.userId)
       },
