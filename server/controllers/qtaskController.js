@@ -11,14 +11,13 @@ exports.getQTasks = async (req, res) => {
 };
 
 exports.createQTask = async (req, res) => {
-  const { date, workTasks, personalTasks, assigned_by, notes, timeSpent } = req.body;
+  const { date, workTasks, personalTasks, notes, timeSpent } = req.body;
   try {
     const qtask = await prisma.qtask.create({
       data: {
         date,
         workTasks: workTasks.join(', '),
         personalTasks: personalTasks.join(', '),
-        assigned_by,
         notes,
         timeSpent,
         userId: Number(req.userId)
