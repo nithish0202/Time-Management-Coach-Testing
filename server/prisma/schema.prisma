@@ -26,7 +26,6 @@ model Task {
   note              String?
   reason            String?
   status            String
-  assigned_to       String
   priority_tags     Json?
 
   userId            Int    
@@ -40,7 +39,6 @@ model Qtask {
   date              DateTime 
   workTasks         String
   personalTasks     String
-  assigned_by       String
   notes             String
   timeSpent         String
 
