@@ -11,7 +11,7 @@ import QuickTaskFormPage from './components/pages/QuickTaskFormPage';
 import QuickTaskHistory from './components/QtaskHistory/QuickTaskHistory';
 import EditPriorityTags from './components/EditTags/EditTags';
 import EditTaskPage from './components/EditTask/EditTask';
-import TaskManager from './components/pages/taskmanager';
+// import TaskManager from './components/pages/taskmanager';
 import BACKEND_URL from '../Config';
 import FocusSummary from './components/FourQuadrants/FocusSummary'; 
 import Button from '@mui/material/Button';  
@@ -284,3 +284,4 @@ function App() {
 }
 
 export default App;
+
