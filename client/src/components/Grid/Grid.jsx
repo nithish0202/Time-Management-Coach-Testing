@@ -15,6 +15,7 @@ function Grid({
   onEditPriorityTags,
   globalFilters,
 }) {
+  const navigate = useNavigate(); 
   const filteredTasks = useMemo(() => {
     if (!globalFilters || Object.values(globalFilters).every(arr => arr.length === 0)) {
       return taskList;
@@ -288,5 +289,6 @@ function Grid({
 }
 
 export default Grid;
+
 
 
