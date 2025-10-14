@@ -15,7 +15,6 @@ function Grid({
   onEditPriorityTags,
   globalFilters,
 }) {
-  const navigate = useNavigate(); 
   const filteredTasks = useMemo(() => {
     if (!globalFilters || Object.values(globalFilters).every(arr => arr.length === 0)) {
       return taskList;
@@ -30,6 +29,8 @@ function Grid({
       });
     });
   }, [taskList, globalFilters]);
+
+  const navigate = useNavigate();
 
   // Local state for expanded tag view
   const [expandedTasks, setExpandedTasks] = useState({});
@@ -198,7 +199,8 @@ function Grid({
     Tags
   </Button>
 
-   {isFocusMode && (
+
+  {isFocusMode && (
   <Button
     size="small"
     variant="contained"
@@ -213,6 +215,7 @@ function Grid({
     Edit
   </Button>
 )}
+
 </div>
 
                   </div>
@@ -289,6 +292,3 @@ function Grid({
 }
 
 export default Grid;
-
-
-
