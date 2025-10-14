@@ -17,11 +17,11 @@
 .company-logo {
   width: 68px;
   height: 44px;
-  margin-right: 30px; /* ✅ Tight gap to title */
+  margin-right: 30px; 
   border-radius: 3px;
   position: relative;
   cursor: pointer;
-  left:-320px;
+  right:165px;
 }
 
 .nav-avatar {
@@ -167,3 +167,4 @@
   border-radius: 50%;
   object-fit: cover;
 }
+
