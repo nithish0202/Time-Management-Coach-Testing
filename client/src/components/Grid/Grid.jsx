@@ -13,6 +13,7 @@ function Grid({
   isFocusMode,
   onEditTask,
   onEditPriorityTags,
+  onMarkComplete,
   globalFilters,
 }) {
   const filteredTasks = useMemo(() => {
@@ -199,23 +200,35 @@ function Grid({
     Tags
   </Button>
 
-
-  {isFocusMode && (
   <Button
     size="small"
-    variant="contained"
-    color="primary"
-    onClick={() => navigate(`/edit-tasks/${task.id}`)}
+    onClick={() => onMarkComplete(task.id)}
     style={{
-      padding: '4px 10px',
-      fontSize: '0.75rem',
-      minWidth: 'auto',
+      minWidth: "auto",
+      padding: "2px 10px",
+      backgroundColor: "#4caf50",
+      color: "white",
+      borderRadius: "8px",
     }}
   >
-    Edit
+    Complete
   </Button>
-)}
 
+  {isFocusMode && (
+    <Link
+      to={`/edit-tasks/${task.id}`}
+      style={{
+        textDecoration: 'none',
+        color: 'white',
+        backgroundColor: '#1976d2',
+        padding: '4px 10px',
+        borderRadius: '8px',
+        fontSize: '0.75rem'
+      }}
+    >
+      Edit
+    </Link>
+  )}
 </div>
 
                   </div>
