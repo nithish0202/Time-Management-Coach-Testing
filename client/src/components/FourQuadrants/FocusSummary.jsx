@@ -2,21 +2,21 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import BACKEND_URL from '../../../Config';
 import { Card, CardContent, Typography, Divider, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';  // <-- Import this
+import { useNavigate } from 'react-router-dom';
 
 const FocusSummary = () => {
   const [sessions, setSessions] = useState([]);
-  const navigate = useNavigate();  // <-- Initialize navigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSessions = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/focus`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
         });
-        setSessions(res.data);
+        setSessions(res.data || []);
       } catch (err) {
         console.error('Failed to fetch focus sessions', err);
       }
@@ -25,29 +25,21 @@ const FocusSummary = () => {
     fetchSessions();
   }, []);
 
-  const formatDuration = (seconds) => {
+  const formatDuration = (ms) => {
+    const seconds = Math.floor(ms / 1000);
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
     const s = seconds % 60;
     return `${h ? `${h}h ` : ''}${m ? `${m}m ` : ''}${s}s`;
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
+  const formatDateTime = (dateStr) => {
+    const d = new Date(dateStr);
+    return d.toLocaleString(); // or use custom formatting if needed
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: '#f0f2f5',
-        minHeight: '100vh',
-        padding: '40px',
-      }}
-    >
+    <div style={{ backgroundColor: '#f0f2f5', minHeight: '100vh', padding: '40px' }}>
       {/* Back Button */}
       <Button
         variant="contained"
@@ -62,7 +54,7 @@ const FocusSummary = () => {
         gutterBottom
         style={{
           fontWeight: '300',
-          color: '#111111ff',
+          color: '#111',
           marginBottom: '35px',
           textAlign: 'center',
         }}
@@ -104,16 +96,17 @@ const FocusSummary = () => {
                 <Divider sx={{ marginBottom: '20px' }} />
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <Typography variant="body2" sx={{ color: '#242222ff' }}>
-                    <strong>From:</strong> {formatDate(session.startTime)}
+                  <Typography variant="body2" sx={{ color: '#242222' }}>
+                    <strong>From:</strong> {formatDateTime(session.startTime)}
                   </Typography>
 
-                  <Typography variant="body2" sx={{ color: '#242222ff' }}>
-                    <strong>To:</strong> {formatDate(session.endTime)}
+                  <Typography variant="body2" sx={{ color: '#242222' }}>
+                    <strong>To:</strong> {formatDateTime(session.endTime)}
                   </Typography>
 
-                  <Typography variant="body2" sx={{ color: '#242222ff' }}>
-                    <strong>Time Spent:</strong> {formatDuration(session.timeSpent)}
+                  <Typography variant="body2" sx={{ color: '#242222' }}>
+                    <strong>Time Spent:</strong>{' '}
+                    {session.timeSpent ? formatDuration(session.timeSpent) : 'N/A'}
                   </Typography>
                 </div>
 
@@ -121,7 +114,7 @@ const FocusSummary = () => {
                   variant="subtitle2"
                   sx={{
                     fontWeight: 300,
-                    color: '#161616ff',
+                    color: '#161616',
                     marginTop: '20px',
                     marginBottom: '10px',
                   }}
@@ -129,7 +122,7 @@ const FocusSummary = () => {
                   ✅ Tasks Completed:
                 </Typography>
 
-                {session.completedTasks?.length > 0 ? (
+                {session.completedTasks && session.completedTasks.length > 0 ? (
                   <ul style={{ paddingLeft: '20px', color: '#444', marginBottom: 0 }}>
                     {session.completedTasks.map((task, i) => (
                       <li key={i} style={{ marginBottom: '6px' }}>

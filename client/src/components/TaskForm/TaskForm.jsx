@@ -186,33 +186,42 @@ function TaskForm({ open, onSave, onClose, editTask = null, setTask }) {
             </div>
 
             <div className="form-column">
-              <div className="form-row">
-                <label>Due Date (Optional)</label>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                  <TextField
-                    type="date"
-                    name="due_date"
-                    variant="outlined"
-                    value={newtask.due_date}
-                    InputLabelProps={{ shrink: true }}
-                    onChange={handlechange}
-                  />
-                  {newtask.due_date && (
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      onClick={() => setNewTask((prev) => ({ ...prev, due_date: '' }))}
-                      style={{ minWidth: '110px', padding: '4px 8px' }}
-                    >
-                      Clear
-                    </Button>
-                  )}
-                </div>
-                <small style={{ color: '#666' }}>
-                  Display: {formatDateDisplay(newtask.due_date)}
-                </small>
-              </div>
+            <div className="form-row">
+  <label>Due Date (Optional)</label>
+  <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+    <TextField
+      type="date"
+      name="due_date"
+      variant="outlined"
+      value={newtask.due_date}
+      onChange={handlechange}
+      InputLabelProps={{ shrink: true }}
+      inputProps={{
+        style: {
+          fontSize: '16px',
+          minWidth: '135px', // 👈 This ensures full date is visible
+          fontFamily: 'inherit',
+        }
+      }}
+    />
 
+    {newtask.due_date && (
+      <Button
+        variant="outlined"
+        size="small"
+        onClick={() =>
+          setNewTask((prev) => ({ ...prev, due_date: '' }))
+        }
+        style={{ minWidth: '110px', padding: '4px 8px' }}
+      >
+        Clear
+      </Button>
+    )}
+  </div>
+  <small style={{ color: '#666' }}>
+    Display: {formatDateDisplay(newtask.due_date)}
+  </small>
+</div>
               <div className="form-row">
                 <label>Assigned To</label>
                 <Select
@@ -274,3 +283,4 @@ function TaskForm({ open, onSave, onClose, editTask = null, setTask }) {
 }
 
 export default TaskForm;
+

@@ -257,9 +257,14 @@ useEffect(() => {
   };
 const markTaskAsCompleted = (taskId) => {
   const task = tasks.find(t => t.id === taskId);
-  if (!task) return;
+  if (!task) {
+    console.warn("Task not found:", taskId);
+    return;
+  }
 
-  let saved = JSON.parse(localStorage.getItem("focusMode"));
+  let savedRaw = localStorage.getItem("focusMode");
+  console.log("Focus mode raw data:", savedRaw);
+  let saved = savedRaw ? JSON.parse(savedRaw) : null;
 
   const completedTask = {
     ...task,
@@ -273,15 +278,17 @@ const markTaskAsCompleted = (taskId) => {
     const existingIndex = saved.completedTasks.findIndex(t => t.id === task.id);
 
     if (existingIndex !== -1) {
-      // Update existing entry
       saved.completedTasks[existingIndex] = completedTask;
     } else {
-      // Add new completed task
       saved.completedTasks.push(completedTask);
     }
 
     localStorage.setItem("focusMode", JSON.stringify(saved));
     setCompletedDuringFocus(saved.completedTasks);
+
+    console.log("Focus mode after adding completed task:", saved);
+  } else {
+    console.warn("Not in focus mode or no focusMode data");
   }
 
   const updatedTasks = tasks.map(t =>
@@ -342,7 +349,6 @@ const startFocusMode = () => {
 
   localStorage.setItem("focusMode", JSON.stringify(focusModeData));
   setIsFocusMode(true);
-  navigate('/home');
 };
 
 const endFocusMode = async () => {
@@ -355,8 +361,6 @@ const endFocusMode = async () => {
   const timeSpent = Math.floor((endTime - startTime) / 1000);
 
   const savedFocusRaw = localStorage.getItem("focusMode");
-  console.log("Focus mode data at endFocusMode:", savedFocusRaw);
-
   let savedFocus = null;
   try {
     savedFocus = savedFocusRaw ? JSON.parse(savedFocusRaw) : null;
@@ -389,8 +393,6 @@ const endFocusMode = async () => {
     completedTasks
   };
 
-  console.log("Sending focus session to backend:", sessionSummary);
-
   try {
     await axios.post(`${BACKEND_URL}/api/focus`, sessionSummary, {
       headers: {
@@ -398,14 +400,22 @@ const endFocusMode = async () => {
         'Content-Type': 'application/json'
       }
     });
+
+    // On success:
+    toast.success("Focus session saved successfully!");
   } catch (error) {
     console.error("Failed to save focus session to backend", error);
-  }
+    toast.error("Failed to save focus session. Please try again.");
 
-  localStorage.removeItem("focusMode");
-  setIsFocusMode(false);
-  setCompletedDuringFocus([]);
-  navigate('/login');
+    // Optional: Decide whether to still redirect or let user retry
+    // return; // Uncomment if you want to stop here and not logout
+  } finally {
+    // Clear state and redirect regardless of success or failure
+    localStorage.removeItem("focusMode");
+    setIsFocusMode(false);
+    setCompletedDuringFocus([]);
+    navigate('/login');
+  }
 };
 
 
