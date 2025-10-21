@@ -20,6 +20,7 @@ const formatDateInput = (dateStr) => {
 };
 
 
+
  
  const formatDateDisplay = (dateStr) => {
   if (!dateStr || isNaN(new Date(dateStr))) return '';
@@ -109,71 +110,93 @@ useEffect(() => {
 
 
   // ----- Save Handler -----
-  const handleSave = useCallback((e) => {
-    e.preventDefault();
+ const handleSave = useCallback((e) => {
+  e.preventDefault();
 
-    const requiredFields = [title, createdAt, priority, status, assignedTo];
-if (requiredFields.some(field => !field)) {
-  alert("Please fill all required fields before saving.");
-  return;
-}
+  const requiredFields = [title, createdAt, priority, status, assignedTo];
+  if (requiredFields.some(field => !field)) {
+    alert("Please fill all required fields before saving.");
+    return;
+  }
 
-if (priority === 'high' && !reason) {
-  alert("Please provide a reason for high priority.");
-  return;
-}
+  if (priority === 'high' && !reason) {
+    alert("Please provide a reason for high priority.");
+    return;
+  }
 
-    const cleanedTask = {
-      id: taskId || uuidv4(),
-      title,
-      created_at: new Date(createdAt),
-      due_date: dueDate && !isNaN(new Date(dueDate)) ? new Date(dueDate) : null,
-      priority,
-      note,
-      reason,
-      status,
-      assigned_to: assignedTo,
-    };
-
-    const method = isUpdate ? 'PUT' : 'POST';
-    const url = isUpdate
-      ? `${BACKEND_URL}/api/tasks/${id}`
-      : `${BACKEND_URL}/api/tasks`;
-
-    fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-      body: JSON.stringify(cleanedTask),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to save task');
-        return res.json();
-      })
-      .then(() => {
-        toast.success(isUpdate ? 'Task updated!' : 'Task created!');
-        navigate('/');
-      })
-      .catch((err) => {
-        console.error(err);
-        toast.error('Error saving task');
-      });
-  }, [
-    taskId,
+  const cleanedTask = {
+    id: taskId || uuidv4(),
     title,
-    createdAt,
-    dueDate,
+    created_at: new Date(createdAt),
+    due_date: dueDate && !isNaN(new Date(dueDate)) ? new Date(dueDate) : null,
     priority,
     note,
     reason,
     status,
-    assignedTo,
-    id,
-    isUpdate,
-    navigate,
-  ]);
+    assigned_to: assignedTo,
+  };
+
+  const method = isUpdate ? 'PUT' : 'POST';
+  const url = isUpdate
+    ? `${BACKEND_URL}/api/tasks/${id}`
+    : `${BACKEND_URL}/api/tasks`;
+
+  fetch(url, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    },
+    body: JSON.stringify(cleanedTask),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error('Failed to save task');
+      return res.json();
+    })
+    .then((savedTask) => {
+      // ✅ Check for Focus Mode
+      const focusData = JSON.parse(localStorage.getItem("focusMode"));
+      if (focusData?.isFocusMode && status === "completed") {
+        focusData.completedTasks = focusData.completedTasks || [];
+
+        const existingIndex = focusData.completedTasks.findIndex(t => t.id === cleanedTask.id);
+        const completedCopy = {
+          ...cleanedTask,
+          completed_at: new Date().toISOString(),
+          status: 'completed',
+        };
+
+        if (existingIndex !== -1) {
+          focusData.completedTasks[existingIndex] = completedCopy;
+        } else {
+          focusData.completedTasks.push(completedCopy);
+        }
+
+        localStorage.setItem("focusMode", JSON.stringify(focusData));
+      }
+
+      toast.success(isUpdate ? 'Task updated!' : 'Task created!');
+      navigate('/');
+    })
+    .catch((err) => {
+      console.error(err);
+      toast.error('Error saving task');
+    });
+}, [
+  taskId,
+  title,
+  createdAt,
+  dueDate,
+  priority,
+  note,
+  reason,
+  status,
+  assignedTo,
+  id,
+  isUpdate,
+  navigate,
+]);
+
 
   // ----- Render -----
   return (
@@ -205,11 +228,17 @@ if (priority === 'high' && !reason) {
           <label>Due Date (Optional)</label>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             <TextField
-              fullWidth
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-            />
+  fullWidth
+  type="date"
+  value={dueDate}
+  onChange={(e) => setDueDate(e.target.value)}
+  inputProps={{
+    maxLength: 10,
+    pattern: "\\d{4}-\\d{2}-\\d{2}",
+    placeholder: "YYYY-MM-DD",
+  }}
+/>
+
             {dueDate && (
               <Button
                 variant="outlined"
@@ -306,4 +335,3 @@ if (priority === 'high' && !reason) {
 }
 
 export default EditTaskPage;
-
